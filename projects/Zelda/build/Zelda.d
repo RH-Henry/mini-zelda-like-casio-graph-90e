@@ -26,7 +26,9 @@ Zelda.o: \
  C:/Users/henry_fnk5/Desktop/PrizmSDK-0.3/include/stdlib.h \
  C:/Users/henry_fnk5/Desktop/PrizmSDK-0.3/include/disp_tools.hpp \
  C:/Users/henry_fnk5/Desktop/PrizmSDK-0.3/include/display_syscalls.h \
- C:/Users/henry_fnk5/Desktop/PrizmSDK-0.3/include/spritedef.h
+ C:/Users/henry_fnk5/Desktop/PrizmSDK-0.3/include/spritedef.h \
+ C:/Users/henry_fnk5/Desktop/PrizmSDK-0.3/include/tiles.h \
+ C:/Users/henry_fnk5/Desktop/PrizmSDK-0.3/include/tileset.h
 
 C:/Users/henry_fnk5/Desktop/PrizmSDK-0.3/include/display_syscalls.h:
 
@@ -81,3 +83,7 @@ C:/Users/henry_fnk5/Desktop/PrizmSDK-0.3/include/disp_tools.hpp:
 C:/Users/henry_fnk5/Desktop/PrizmSDK-0.3/include/display_syscalls.h:
 
 C:/Users/henry_fnk5/Desktop/PrizmSDK-0.3/include/spritedef.h:
+
+C:/Users/henry_fnk5/Desktop/PrizmSDK-0.3/include/tiles.h:
+
+C:/Users/henry_fnk5/Desktop/PrizmSDK-0.3/include/tileset.h:

@@ -10,6 +10,8 @@
 #include <stdlib.h>
 #include <disp_tools.hpp>
 #include <spritedef.h>
+#include <tiles.h>
+#include <tileset.h>
 #define true 1
 
 int PxToGrid(int a){
@@ -18,12 +20,12 @@ int PxToGrid(int a){
    
 }
 
-int CheckCollide(int x,int y,int grid[16][9]){
+int CheckCollide(int x,int y,int grid[17][10][4]){
    int xmin=PxToGrid(x+2);
    int xmax=PxToGrid(x+17);
    int ymin=PxToGrid(y+12);
    int ymax=PxToGrid(y+26);
-   if (grid[xmin][ymin]==1||grid[xmin][ymax]==1||grid[xmax][ymin]==1||grid[xmax][ymax]==1){
+   if (grid[xmin][ymin][0]==1||grid[xmin][ymax][0]==1||grid[xmax][ymin][0]==1||grid[xmax][ymax][0]==1){
       return 1;
    }else{
       return 0;
@@ -31,12 +33,12 @@ int CheckCollide(int x,int y,int grid[16][9]){
    
 }
 
-int CheckCollidePot(int x,int y,int grid[16][9]){
+int CheckCollidePot(int x,int y,int grid[17][10][4]){
    int xmin=PxToGrid(x);
    int xmax=PxToGrid(x+24);
    int ymin=PxToGrid(y);
    int ymax=PxToGrid(y+24);
-   if (grid[xmin][ymin]==1||grid[xmin][ymax]==1||grid[xmax][ymin]==1||grid[xmax][ymax]==1){
+   if (grid[xmin][ymin][0]==1||grid[xmin][ymax][0]==1||grid[xmax][ymin][0]==1||grid[xmax][ymax][0]==1){
       return 1;
    }else{
       return 0;
@@ -44,8 +46,8 @@ int CheckCollidePot(int x,int y,int grid[16][9]){
    
 }
 
-int CheckPot(int x,int y,int grid[16][9]){
-   if (grid[PxToGrid(x)][PxToGrid(y)]){
+int CheckPot(int x,int y,int grid[17][10][4]){
+   if (grid[PxToGrid(x)][PxToGrid(y)][1]){
       return 1;
    }else{
       return 0;
@@ -53,42 +55,95 @@ int CheckPot(int x,int y,int grid[16][9]){
    
 }
 
-int delete(int x, int y, int grid[16][9]){
-   return grid[PxToGrid(x)][PxToGrid(y)];
+int CheckDoor(int x,int y,int grid[17][10][4]){
+   int xmin=PxToGrid(x-6);
+   int xmax=PxToGrid(x+25);
+   int ymin=PxToGrid(y+5);
+   int ymax=PxToGrid(y+26);
+   int x2=PxToGrid(x+9);
+   int y2=PxToGrid(y+13);
+   if (grid[x2][ymin][3]==1 && grid[x2][ymax][3]==1){
+        return 1;
+    } else if (grid[xmin][y2][3]==1 && grid[xmax][y2][3]==1){
+        return 1;
+    }else{
+        return 0;
+    }
 }
 
 
-int normal(float xp,float yp,int pos){
-   if(pos==0){
-      CopySpriteNbitMasked(linkf, xp, yp, 19 ,28, linkf_palette,0xf810,8);
+int normal(float xp,float yp,int pos, int anime){
+   if (anime==0){
+      if(pos==0){
+         CopySpriteNbitMasked(linkf1, xp, yp, 19 ,28, linkf1_palette,0xf810,8);
+      }
+      if(pos==1){
+         CopySpriteNbitMasked(linkb1, xp, yp, 19 ,28, linkb1_palette,0xf810,8);
+      }
+      if(pos==2){
+         CopySpriteNbitMasked(linkl1, xp, yp, 19 ,28, linkl1_palette,0xf810,8);
+      }
+      if(pos==3){
+         CopySpriteNbitMasked(linkr1, xp, yp, 19 ,28, linkr1_palette,0xf810,8);
+      }
    }
-   if(pos==1){
-      CopySpriteNbitMasked(linkb, xp, yp, 19 ,28, linkb_palette,0xf810,8);
+   else if (anime==1){
+      if(pos==0){
+         CopySpriteNbitMasked(linkf2, xp, yp, 19 ,28, linkf2_palette,0xf810,8);
+      }
+      if(pos==1){
+         CopySpriteNbitMasked(linkb2, xp, yp, 19 ,28, linkb2_palette,0xf810,8);
+      }
+      if(pos==2){
+         CopySpriteNbitMasked(linkl2, xp, yp, 19 ,28, linkl2_palette,0xf810,8);
+      }
+      if(pos==3){
+         CopySpriteNbitMasked(linkr2, xp, yp, 19 ,28, linkr2_palette,0xf810,8);
+      }
    }
-   if(pos==2){
-      CopySpriteNbitMasked(linkl, xp, yp, 19 ,28, linkl_palette,0xf810,8);
-   }
-   if(pos==3){
-      CopySpriteNbitMasked(linkr, xp, yp, 19 ,28, linkr_palette,0xf810,8);
+   else{
+      if(pos==0){
+         CopySpriteNbitMasked(linkf3, xp, yp, 19 ,28, linkf3_palette,0xf810,8);
+      }
+      if(pos==1){
+         CopySpriteNbitMasked(linkb3, xp, yp, 19 ,28, linkb3_palette,0xf810,8);
+      }
+      if(pos==2){
+         CopySpriteNbitMasked(linkl3, xp, yp, 19 ,28, linkl3_palette,0xf810,8);
+      }
+      if(pos==3){
+         CopySpriteNbitMasked(linkr3, xp, yp, 19 ,28, linkr3_palette,0xf810,8);
+      }
    }
 }
 
 int takedmg(float xp,float yp,int pos,int timer){
    if (timer==0||timer==2||timer==4||timer==6||timer==8){
             if(pos==0){
-			      CopySpriteNbitMaskedDmg(linkf, xp, yp, 19 ,28, linkf_palette,0xf810,8);
+			      CopySpriteNbitMaskedDmg(linkf1, xp, yp, 19 ,28, linkf1_palette,0xf810,8);
 		      }
             if(pos==1){
-               CopySpriteNbitMaskedDmg(linkb, xp, yp, 19 ,28, linkb_palette,0xf810,8);
+               CopySpriteNbitMaskedDmg(linkb1, xp, yp, 19 ,28, linkb1_palette,0xf810,8);
             }
             if(pos==2){
-               CopySpriteNbitMaskedDmg(linkl, xp, yp, 19 ,28, linkl_palette,0xf810,8);
+               CopySpriteNbitMaskedDmg(linkl1, xp, yp, 19 ,28, linkl1_palette,0xf810,8);
             }
             if(pos==3){
-               CopySpriteNbitMaskedDmg(linkr, xp, yp, 19 ,28, linkr_palette,0xf810,8);
+               CopySpriteNbitMaskedDmg(linkr1, xp, yp, 19 ,28, linkr1_palette,0xf810,8);
             }
          }else{
-            normal(xp,yp,pos);
+            if(pos==0){
+               CopySpriteNbitMasked(linkf1, xp, yp, 19 ,28, linkf1_palette,0xf810,8);
+            }
+            if(pos==1){
+               CopySpriteNbitMasked(linkb1, xp, yp, 19 ,28, linkb1_palette,0xf810,8);
+            }
+            if(pos==2){
+               CopySpriteNbitMasked(linkl1, xp, yp, 19 ,28, linkl1_palette,0xf810,8);
+            }
+            if(pos==3){
+               CopySpriteNbitMasked(linkr1, xp, yp, 19 ,28, linkr1_palette,0xf810,8);
+            }
          }
 }
 
@@ -115,75 +170,169 @@ int GetKey_NonBlock() {
 }
 
 void main(void) {
-
-	CopySprite(bg, 0, 0, 384 ,216);
    //24px par case largeur et 16 cases dans l'ecran
    //24 px hauteur et 9 cases
-   int grid[16][9]={0};
+   int grid[17][10][4]={0};
    int i;
    int j;
 	int key;
-	float xp = 175;
-	float yp = 95;
-	int pos = 0;
+	float xp = 8*24-9;
+	float yp = 7*24-4;
+	int pos = 1;
    int timer = 0;
    int life;
    int OnHead=0;
-   int dir=0;
+   int dir=1;
    int xpot;
    int ypot;
    int state=0;
    int HeadCld=0;
-   grid[8][3]=1;
-   grid[9][3]=1;
-   grid[3][5]=1;
-   grid[3][6]=1;
-   grid[2][2]=1;
+   int v=4;
+   int potgravity=0;
+   int locx=0;
+   int locy=0;
+   int locz=-1;
+   map(locx,locy,locz,grid,1);
    life=5;
+   int anime=0;
    Bdisp_EnableColor(1);
 	while (true)
 	{
       
-      CopySprite(bg, 0, 0, 384 ,216);
+      //CopySprite(bg, 0, 0, 384 ,216);
       for (i=0;i<16;i++){
          for (j=0;j<9;j++){
-            if(grid[i][j]==1){
+            if(grid[i][j][2]==0){
+               CopySprite(cave, i*24, j*24, 24 ,24);
+            }
+            else if(grid[i][j][2]==1){
+               CopySprite(cave_wall_1, i*24, j*24, 24 ,24);
+            }
+            else if(grid[i][j][2]==2){
+               CopySprite(cave_wall_2, i*24, j*24, 24 ,24);
+            }
+            else if(grid[i][j][2]==3){
+               CopySprite(cave_wall_3, i*24, j*24, 24 ,24);
+            }
+            else if(grid[i][j][2]==4){
+               CopySprite(cave_wall_4, i*24, j*24, 24 ,24);
+            }
+            else if(grid[i][j][2]==5){
+               CopySprite(cave_btm_left, i*24, j*24, 24 ,24);
+            }
+            else if(grid[i][j][2]==6){
+               CopySprite(cave_top_left, i*24, j*24, 24 ,24);
+            }
+            else if(grid[i][j][2]==7){
+               CopySprite(cave_top_right, i*24, j*24, 24 ,24);
+            }
+            else if(grid[i][j][2]==8){
+               CopySprite(cave_btm_right, i*24, j*24, 24 ,24);
+            }
+            else if(grid[i][j][2]==9){
+               CopySprite(cave, i*24, j*24, 24 ,24);
+               CopySprite(door_top, i*24, j*24, 12 ,24);
+            }
+            else if(grid[i][j][2]==10){
+               CopySprite(cave, i*24, j*24, 24 ,24);
+               CopySprite(door_top, i*24+12, j*24, 12 ,24);
+            }
+            else if(grid[i][j][2]==11){
+               CopySprite(cave, i*24, j*24, 24 ,24);
+               CopySprite(door_right, i*24, j*24, 24 ,12);
+            }
+            else if(grid[i][j][2]==12){
+               CopySprite(cave, i*24, j*24, 24 ,24);
+               CopySprite(door_right, i*24, j*24+12, 24 ,12);
+            }
+            else if(grid[i][j][2]==13){
+               CopySprite(cave, i*24, j*24, 24 ,24);
+               CopySprite(door_btm, i*24, j*24, 12 ,24);
+            }
+            else if(grid[i][j][2]==14){
+               CopySprite(cave, i*24, j*24, 24 ,24);
+               CopySprite(door_btm, i*24+12, j*24, 12 ,24);
+            }
+            else if(grid[i][j][2]==15){
+               CopySprite(cave, i*24, j*24, 24 ,24);
+               CopySprite(door_left, i*24, j*24, 24 ,12);
+            }
+            else if(grid[i][j][2]==16){
+               CopySprite(cave, i*24, j*24, 24 ,24);
+               CopySprite(door_left, i*24, j*24+12, 24 ,12);
+            }
+         }
+      }
+      for (i=0;i<16;i++){
+         for (j=0;j<9;j++){
+            if(grid[i][j][1]==1){
                CopySpriteNbitMasked(vase, i*24, j*24, 24 ,24, vase_palette,0xf810,8);
             }
          }
       }
       timer-=1;
       
+      if(OnHead==1){
+         v=2;
+      }else{
+         v=4;
+      }
 		
 		key = PRGM_GetKey();
 		if (key == KEY_PRGM_LEFT){
-			xp-=4;
+			xp-=v;
+         anime+=1;
+         if (CheckDoor(xp-11,yp,grid)){
+            map(locx-1,locy,locz,grid,1);
+            locx-=1;
+            xp=24*14;
+         }
          if (CheckCollide(xp,yp,grid)){
-            xp+=4;
+            xp+=v;
          }
 			pos=2;
-		}
+		}else
 		if (key == KEY_PRGM_RIGHT){
-			xp+=4;
+			xp+=v;
+         anime+=1;
+         if (CheckDoor(xp+12,yp,grid)){
+            map(locx+1,locy,locz,grid,1);
+            locx+=1;
+            xp=24;
+         }
          if (CheckCollide(xp,yp,grid)){
-            xp-=4;
+            xp-=v;
          }
 			pos=3;
-		}
+		}else
 		if (key == KEY_PRGM_UP){
 			pos=1;
-			yp-=4;
-         if (CheckCollide(xp,yp,grid)){
-            yp+=4;
+			yp-=v;
+         if (CheckDoor(xp,yp-5,grid)){
+            map(locx,locy+1,locz,grid,1);
+            locy+=1;
+            yp=7*24-5;
          }
-		}
+         anime+=1;
+         if (CheckCollide(xp,yp,grid)){
+            yp+=v;
+         }
+		}else
 		if (key == KEY_PRGM_DOWN){
 			pos=0;
-			yp+=4;
-         if (CheckCollide(xp,yp,grid)){
-            yp-=4;
+			yp+=v;
+         anime+=1;
+         if (CheckDoor(xp,yp+14,grid)){
+            map(locx,locy-1,locz,grid,1);
+            locy-=1;
+            yp=24;
          }
-		}
+         if (CheckCollide(xp,yp,grid)){
+            yp-=v;
+         }
+		}else{
+         anime=0;
+      }
 
 		if (xp<1){
 			xp=1;
@@ -199,7 +348,10 @@ void main(void) {
 		}
       if (timer<-1){
          timer=-1;
-         normal(xp,yp,pos);
+         if (anime>2){
+            anime=0;
+         }
+         normal(xp,yp,pos,anime);
       }
       if (timer>-1){
          takedmg(xp,yp,pos,timer);
@@ -214,25 +366,29 @@ void main(void) {
             if(pos==0){
                if (CheckPot(xp+10,yp+30,grid)){
                   OnHead=1;
-                  grid[PxToGrid(xp+10)][PxToGrid(yp+30)]=0;
+                  grid[PxToGrid(xp+10)][PxToGrid(yp+30)][0]=0;
+                  grid[PxToGrid(xp+10)][PxToGrid(yp+30)][1]=0;
                }
             }
             if(pos==1){
                if (CheckPot(xp+10,yp-6,grid)){
                   OnHead=1;
-                  grid[PxToGrid(xp+10)][PxToGrid(yp-6)]=0;
+                  grid[PxToGrid(xp+10)][PxToGrid(yp-6)][0]=0;
+                  grid[PxToGrid(xp+10)][PxToGrid(yp-6)][1]=0;
                }
             }
             if(pos==2){
-               if (CheckPot(xp-6,yp+7,grid)){
+               if (CheckPot(xp-6,yp+12,grid)){
                   OnHead=1;
-                  grid[PxToGrid(xp-6)][PxToGrid(yp+12)]=0;
+                  grid[PxToGrid(xp-6)][PxToGrid(yp+12)][0]=0;
+                  grid[PxToGrid(xp-6)][PxToGrid(yp+12)][1]=0;
                }
             }
             if(pos==3){
-               if (CheckPot(xp+25,yp+7,grid)){
+               if (CheckPot(xp+25,yp+12,grid)){
                   OnHead=1;
-                  grid[PxToGrid(xp+25)][PxToGrid(yp+12)]=0;
+                  grid[PxToGrid(xp+25)][PxToGrid(yp+12)][0]=0;
+                  grid[PxToGrid(xp+25)][PxToGrid(yp+12)][1]=0;
                }
             }
          }else{
@@ -240,8 +396,9 @@ void main(void) {
                OnHead=0;
                dir=pos;
                xpot=xp-2;
-               ypot=yp-10;
+               ypot=yp-8;
                state=10;
+               potgravity=-2;
             }
 
          }
@@ -250,18 +407,25 @@ void main(void) {
          HeadCld=0;
       }
       if (state>0){
+         if(state%2==1){
+            potgravity+=1;
+         }
          state-=1;
          if (dir==0){
-            ypot+=12;
+            ypot+=11;
+            ypot+=potgravity;
          }
          if (dir==1){
-            ypot-=12;
+            ypot-=11;
+            ypot+=potgravity;
          }
          if (dir==2){
             xpot-=12;
+            ypot+=potgravity;
          }
          if (dir==3){
             xpot+=12;
+            ypot+=potgravity;
          }
          if (xpot>384-24){
             xpot=384-24;
@@ -312,17 +476,16 @@ void main(void) {
                   GetKey(&key);
                   key = PRGM_GetKey();
                   if (key==KEY_PRGM_RETURN){
-                     xp = 175;
-                     yp = 95;
-                     pos = 0;
+                     xp = 8*24-9;
+                     yp = 7*24-4;
+                     pos = 1;
                      timer = 0;
                      life=5;
                      OnHead=0;
-                     grid[8][3]=1;
-                     grid[9][3]=1;
-                     grid[3][5]=1;
-                     grid[3][6]=1;
-                     grid[2][2]=1;
+                     locx=0;
+                     locy=0;
+                     locz=-1;
+                     map(0,0,-1,grid,1);
                      break;
 
                   }
